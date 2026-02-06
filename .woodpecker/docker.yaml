@@ -1,0 +1,52 @@
+when:
+  - event: [push, pull_request]
+    branch: master
+  - event: manual
+
+labels:
+  backend: docker
+  platform: linux/amd64
+
+steps:
+  - name: build
+    image: docker
+    commands:
+      - docker build -t woodpecker-ci-demo .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  - name: woodpecker-ci-demo
+    image: woodpecker-ci-demo
+    detach: true
+    environment:
+      PORT: "4000"
+    depends_on: [build]
+
+  - name: smoke-tests
+    image: ghcr.io/orange-opensource/hurl:latest
+    commands:
+      # it's must have magic option, due to woodpecker
+      # doesnt have any other way to check readiness of container
+      - sleep 5
+      - hurl --test --color --variable host=http://woodpecker-ci-demo:4000 tests/*.hurl --report-html ".hurl-report"
+    depends_on: [woodpecker-ci-demo]
+
+  - name: push
+    image: docker
+    commands:
+      - echo $${REGISTRY_PASS} | docker login -u $${REGISTRY_USER} --password-stdin $${REGISTRY_BASE_PATH_ENV}
+      - docker tag woodpecker-ci-demo:latest $${REGISTRY_BASE_PATH_ENV}/woodpecker-ci-demo:latest
+      - docker push $${REGISTRY_BASE_PATH_ENV}/woodpecker-ci-demo:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      REGISTRY_BASE_PATH_ENV:
+        from_secret: secret_registry_base_path
+      REGISTRY_PASS:
+        from_secret: docker_password
+      REGISTRY_USER:
+        from_secret: docker_username
+    depends_on: [smoke-tests]
+
+depends_on:
+  - test

@@ -1,0 +1,29 @@
+matrix:
+  RUST: [stable, nightly]
+
+when:
+  - event: [push, pull_request]
+    branch: master
+  - event: manual
+
+labels:
+  backend: docker
+  platform: linux/amd64
+
+steps:
+  - name: build
+    image: rust
+    environment:
+      CARGO_TERM_COLOR: always
+    commands:
+      - rustup default $RUST
+      - echo "Building Cargo Demo Project"
+      - cargo build -j 4
+
+  - name: test
+    image: rust
+    environment:
+      CARGO_TERM_COLOR: always
+    commands:
+      - rustup default $RUST
+      - cargo test -j 4

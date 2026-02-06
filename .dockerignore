@@ -1,0 +1,7 @@
+# Exclude everything:
+*
+
+# Un-exclude what need:
+!Cargo.toml
+!Cargo.lock
+!src/
