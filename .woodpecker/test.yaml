@@ -18,7 +18,7 @@ steps:
     commands:
       - rustup default $RUST
       - echo "Building Cargo Demo Project"
-      - cargo build -j 4
+      - cargo build
 
   - name: test
     image: rust
@@ -26,4 +26,4 @@ steps:
       CARGO_TERM_COLOR: always
     commands:
       - rustup default $RUST
-      - cargo test -j 4
+      - cargo test

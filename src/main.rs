@@ -1,10 +1,4 @@
-//! Run with
-//!
-//! ```not_rust
-//! cargo run
-//! ```
-
-use axum::{Router, response::Html, routing::get, Json};
+use axum::{Json, Router, response::Html, routing::get};
 use serde_json::json;
 use std::env;
 

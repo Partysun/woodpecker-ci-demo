@@ -1,0 +1,19 @@
+[tools]
+"aqua:woodpecker-ci/woodpecker/woodpecker-cli" = "latest"
+"cargo:hurl" = "latest"
+
+[tasks.test]
+description = "Run tests using Woodpecker CI"
+run = "woodpecker-cli exec .woodpecker/test.yaml --repo-path ."
+
+[tasks.build]
+description = "Build Docker image, run integration tests, and push to registry using Woodpecker CI"
+run = "woodpecker-cli exec --repo-trusted-volumes --secrets-file=\".secrets.yaml\" .woodpecker/docker.yaml --repo-path ."
+
+[tasks.lint]
+description = "Format and lint Rust code"
+run = "cargo fmt --check && RUSTFLAGS=\"-Dwarnings\" cargo clippy --workspace -- -D warnings"
+
+[tasks.test-hurl]
+description = "Run integration tests using Hurl against local server (http://localhost:4000)"
+run = "hurl --test --color --variable host=http://localhost:4000 tests/*.hurl"

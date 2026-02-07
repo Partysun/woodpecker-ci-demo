@@ -17,6 +17,9 @@ ci:
 test:
 	$(HURL) --test --color --variable host=$(TEST_HOST) tests/*.hurl
 
+lint:
+	cargo fmt --check
+
 run:
 	$(CARGO) run
 
