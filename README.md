@@ -4,6 +4,8 @@
 
 A minimal Rust web application demonstrating CI/CD pipelines with [Woodpecker CI](https://woodpecker-ci.org/).
 
+[>> Related Tutorial](https://ci-without-overhead.zatsepin.dev/getting_started.html)
+
 ## Overview
 
 This project is a simple HTTP API built with [Axum](https://github.com/tokio-rs/axum) that showcases:
