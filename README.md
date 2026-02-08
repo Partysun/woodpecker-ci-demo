@@ -1,3 +1,5 @@
+[![status-badge](https://ci.zatsepin.dev/api/badges/5/status.svg)](https://ci.zatsepin.dev/repos/5)
+
 # Woodpecker CI Demo
 
 A minimal Rust web application demonstrating CI/CD pipelines with [Woodpecker CI](https://woodpecker-ci.org/).
